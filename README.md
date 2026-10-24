@@ -38,27 +38,27 @@ Keys: `Z` undo · `Esc` close. Right-click or long-press a card to zoom.
 
 ```mermaid
 flowchart LR
-  cards["web/js/cards.js<br>card data"] --> game["web/<br>the game"]
+  cards["docs/js/cards.js<br>card data"] --> game["docs/<br>the game"]
   cards --> studio["art/<br>card studio"]
-  studio -- "tools/render_cards.py" --> img["web/img/<br>card images"]
+  studio -- "tools/render_cards.py" --> img["docs/img/<br>card images"]
   img --> game
 ```
 
-`web/` is the whole site, plain HTML, CSS and JavaScript with no build step, and GitHub Pages serves
-it as it is. It also runs straight from the folder, by opening `web/index.html`, but offline play
-and installing as an app need a web server, for example `python3 -m http.server -d web`.
+`docs/` is the whole site, plain HTML, CSS and JavaScript with no build step, and GitHub Pages
+serves it as it is. It also runs straight from the folder, by opening `docs/index.html`, but offline
+play and installing as an app need a web server, for example `python3 -m http.server -d docs`.
 
 | File | What it holds |
 | --- | --- |
-| `web/js/cards.js` | Every card: number, keyword, class, actions, expansion, campaign symbol |
-| `web/js/engine.js` | The rules: turns, card actions, win and loss checks, undo |
-| `web/js/ui.js`, `web/style.css` | The table, card animations, panels and rules page |
-| `web/js/sound.js` | Small sound effects, synthesised in the browser |
-| `web/index.html` | The page and the rules text |
-| `web/img/` | Card images, expansion symbols and app icons |
-| `web/sw.js`, `web/manifest.json` | Offline play and installation |
+| `docs/js/cards.js` | Every card: number, keyword, class, actions, expansion, campaign symbol |
+| `docs/js/engine.js` | The rules: turns, card actions, win and loss checks, undo |
+| `docs/js/ui.js`, `docs/style.css` | The table, card animations, panels and rules page |
+| `docs/js/sound.js` | Small sound effects, synthesised in the browser |
+| `docs/index.html` | The page and the rules text |
+| `docs/img/` | Card images, expansion symbols and app icons |
+| `docs/sw.js`, `docs/manifest.json` | Offline play and installation |
 | `art/` | The card studio: card layout, illustrations and the papercut style |
-| `tools/render_cards.py` | Renders every card from the studio into `web/img/` |
+| `tools/render_cards.py` | Renders every card from the studio into `docs/img/` |
 
 ### Card art
 
@@ -72,16 +72,17 @@ illustration or the style, render the cards again:
 
 ```sh
 pip install pillow playwright && playwright install chromium
-python3 tools/render_cards.py paper     # rewrites web/img/cards/*.webp and web/img/icons/*.webp
+python3 tools/render_cards.py     # rewrites docs/img/cards/*.webp and docs/img/icons/*.webp
 ```
 
-If the parts of the card move, update `ANATOMY` in `web/js/ui.js` too, so the card diagram in the
-rules points at them.
+If the parts of the card move, update `ANATOMY` in `docs/js/ui.js` too, so the card diagram in
+the rules points at them.
 
 ## Publishing
 
-The workflow in `.github/workflows/pages.yml` publishes `web/` on GitHub Pages on every push. In the
-repository settings, under Pages, set the source to *GitHub Actions*.
+GitHub Pages serves the `docs/` folder straight from the repository. In the repository settings,
+under Pages, set the source to *Deploy from a branch*, with the branch `master` and the folder
+`/docs`. Every push to `master` then updates the site.
 
 ## License
 

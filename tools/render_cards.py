@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Render every card of the game in one style of the card studio (art/) into web/img/, as the game's art.
+"""Render every card of the game with the card studio (art/) into docs/img/, as the game's art.
 
 usage: python3 tools/render_cards.py [STYLE] [--scale 1.5] [--quality 82]      (STYLE defaults to paper)
 
-Each card side is saved as web/img/cards/<card>_p.webp (passive) or <card>_i.webp (ignited), and each
-expansion symbol as web/img/icons/<expansion>.webp.
+Each card side is saved as docs/img/cards/<card>_p.webp (passive) or <card>_i.webp (ignited), and each
+expansion symbol as docs/img/icons/<expansion>.webp.
 Needs Pillow and Playwright with Chromium:  pip install pillow playwright && playwright install chromium
 """
 import argparse
@@ -55,7 +55,7 @@ async def render(style, scale, quality):
         if style not in info['styles']:
             raise SystemExit(f"unknown style '{style}' (styles: {', '.join(info['styles'])})")
         lossless = info['styles'][style]
-        out = ROOT / 'web' / 'img'
+        out = ROOT / 'docs' / 'img'
         for sub in ('cards', 'icons'):
             shutil.rmtree(out / sub, ignore_errors=True)
             (out / sub).mkdir(parents=True)
