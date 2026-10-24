@@ -1,0 +1,8 @@
+# The original game files (rulebook, print-and-play) stay on this computer: they are for personal
+# use only.
+*.pdf
+
+# Card studio previews
+art/samples/
+
+__pycache__/

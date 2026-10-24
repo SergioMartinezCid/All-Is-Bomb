@@ -1,0 +1,58 @@
+/* Card skeleton shared by every style (cards are 400 x 601, like the printed ones), plus the
+   studio pages. Styles move and dress these parts in their own files. */
+body { margin: 0; background: #2b2a30; color: #eee; font: 15px/1.4 system-ui, sans-serif; }
+.defs { position: absolute; width: 0; height: 0; }
+
+.card { position: relative; width: 400px; height: 601px; overflow: hidden; flex: none; }
+.card > * { position: absolute; }
+.card .layer { inset: 0; }
+.card .layer > svg { display: block; width: 100%; height: 100%; }
+.card .art { left: 0; top: 122px; width: 400px; height: 260px; }
+.card .art > svg, .card .art > canvas { display: block; width: 100%; height: 100%; }
+.card .bomb { left: 4px; top: 4px; width: 132px; height: 132px; }
+.card .bomb > svg, .card .bomb > canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.card .bomb b { position: absolute; left: 8px; top: 20px; width: 100px; height: 100px; display: grid; place-items: center; font-weight: 400; line-height: 1; }
+.card .kw { left: 148px; top: 6px; width: 228px; height: 46px; display: grid; place-items: center; }
+.card .kw > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.card .kw span { position: relative; }
+.card .title { left: 136px; right: 10px; top: 54px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.card .title b { font-weight: 400; line-height: 1.05; white-space: nowrap; }
+.card .box { left: 24px; right: 24px; top: 386px; height: 150px; display: flex; align-items: center; justify-content: center; padding: 10px 22px; box-sizing: border-box; }
+.card .box > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.card .txt { position: relative; width: 100%; text-align: center; }
+.card .txt p { margin: 0; }
+.card .txt p + p { margin-top: .3em; }
+.card .txt .sm { font-size: .78em; }
+.card .state { left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.card .state svg { height: 26px; width: auto; }
+.card .exp { left: 12px; bottom: 12px; width: 52px; height: 52px; }
+.card .exp > svg, .card .exp > canvas { display: block; width: 100%; height: 100%; }
+.card .sym { right: 16px; bottom: 12px; font-size: 24px; line-height: 1; }
+
+/* Fallback colours for illustration roles a style doesn't paint itself. */
+:where(.scene, .icon) :is(.eg) { fill: #f6ead0; } :where(.scene, .icon) .ck { fill: rgba(240,110,120,.3); }
+:where(.scene, .icon) .pk { fill: #f4a7b9; } :where(.scene, .icon) .hy { fill: #f2c55a; } :where(.scene, .icon) .hb { fill: #9a6038; }
+:where(.scene, .icon) .gy { fill: #bdb8c4; } :where(.scene, .icon) .dg { fill: #4c4655; } :where(.scene, .icon) .rd { fill: #e0533d; }
+:where(.scene, .icon) .or { fill: #f59a3c; } :where(.scene, .icon) .yl { fill: #fbe38a; } :where(.scene, .icon) .lg { fill: #a5d38b; }
+:where(.scene, .icon) .lb { fill: #c4e3f3; } :where(.scene, .icon) .nv { fill: #34437a; } :where(.scene, .icon) .tl { fill: #3fa7a0; }
+:where(.scene, .icon) .br { fill: #8a5a3b; } :where(.scene, .icon) .tn { fill: #f0c27b; } :where(.scene, .icon) .bd { fill: #c9773b; }
+:where(.scene, .icon) .fm { fill: rgba(150,205,90,.6); } :where(.scene, .icon) .tip { fill: #3b3340; }
+
+/* samples page */
+.samples { padding: 24px 28px 60px; }
+.style-row { margin-bottom: 44px; }
+.style-row h2 { margin: 0 0 2px; font-size: 22px; }
+.style-row > p { margin: 0 0 12px; color: #aaa; }
+.cards { display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; }
+.cell { width: 260px; height: 390.65px; }
+.cell .card { transform: scale(.65); transform-origin: 0 0; border-radius: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.4); }
+.extras { display: flex; flex-direction: column; gap: 8px; }
+.extras small { color: #999; text-transform: uppercase; letter-spacing: .1em; font-size: 11px; }
+.icons { display: flex; gap: 12px; align-items: center; }
+.iconbox { width: 64px; height: 64px; }
+.iconbox > svg, .iconbox > canvas { display: block; width: 100%; height: 100%; }
+.minis { display: flex; gap: 6px; }
+.mini { width: 62px; height: 93.15px; }
+.mini .card { transform: scale(.155); transform-origin: 0 0; border-radius: 40px; }
+.deck { display: flex; flex-wrap: wrap; gap: 14px; padding: 20px; }
+.single { display: inline-block; }

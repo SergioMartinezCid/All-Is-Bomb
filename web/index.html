@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>All Is Bomb</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#121016">
+  <link rel="apple-touch-icon" href="img/icon-180.png">
+  <link rel="icon" href="img/favicon.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+  <header id="top">
+    <button class="brand" id="btn-home" title="New game">All is <span>Bomb</span></button>
+    <div id="conds"></div>
+    <div id="tools">
+      <span id="turn"></span>
+      <button class="tool" id="btn-undo" title="Undo (Z)"></button>
+      <button class="tool" id="btn-restart" title="Restart this deal"></button>
+      <button class="tool" id="btn-sound" title="Sound"></button>
+      <button class="tool" id="btn-log" title="Log"></button>
+      <button class="tool" id="btn-rules" title="Rules"></button>
+    </div>
+  </header>
+
+  <div id="layout">
+    <main id="table">
+      <section class="zone" id="z-deck">
+        <h2>Deck <b id="n-deck"></b></h2>
+        <div class="row" id="deck"></div>
+      </section>
+      <div class="split">
+        <section class="zone" id="z-discard">
+          <h2>Discard <b id="n-discard"></b></h2>
+          <div class="row" id="discard"></div>
+        </section>
+        <section class="zone" id="z-aside">
+          <h2>Aside</h2>
+          <div class="row" id="aside"></div>
+        </section>
+      </div>
+      <div class="split bottom">
+        <section class="zone" id="z-equipped">
+          <h2>Equipped <em id="urgent-all"></em></h2>
+          <div class="row" id="equipped"></div>
+        </section>
+        <section class="zone" id="z-play">
+          <h2>Play</h2>
+          <div id="play"></div>
+          <ol id="phases"></ol>
+          <div id="prompt"></div>
+        </section>
+      </div>
+      <section class="zone" id="z-win">
+        <h2>To win</h2>
+        <div id="win"></div>
+      </section>
+    </main>
+    <aside id="preview"></aside>
+  </div>
+
+  <template id="rules-tpl">
+    <h2>Rules</h2>
+    <nav class="toc"></nav>
+
+    <section id="r-intro">
+      <h3>Overview</h3>
+      <p class="flavor">The princess is asleep, and you are the servant who has to get her breakfast right before she wakes up. The trouble is that everything in the castle is a bomb: the prophets who know what she wants, the dishes, even the princess herself.</p>
+      <p>All Is Bomb is a short solo puzzle played with a deck of 18 two-sided cards. By moving cards around the deck, you learn which breakfast the princess wants, get that dish ready, and have her take it, before too many cards blow up.</p>
+      <p>After the shuffle, nothing is hidden or random: you may look through the deck at any time. The difficulty lies in the chain reactions.</p>
+      <p>The game also has six expansions, a helper pack, a quick variant called Blitz, and a six-game campaign.</p>
+    </section>
+
+    <section id="r-setup">
+      <h3>Setup</h3>
+      <p>These rules describe the solo base game. Cards with a symbol in the lower-left corner belong to expansions: leave them out for now.</p>
+      <ol>
+        <li>Turn every card so its blue PASSIVE side faces up, then shuffle them into a face-up DECK without flipping any of them. You may look through the DECK whenever you like.</li>
+        <li>Take the top 3 cards of the DECK and EQUIP them: lay them out in front of you, in your row of EQUIPPED CARDS.</li>
+        <li>Keep space for a PLAY AREA and a DISCARD PILE.</li>
+      </ol>
+    </section>
+
+    <section id="r-cards">
+      <h3>The cards</h3>
+      <div class="anatomy">
+        <figure class="anat"><img data-card="croissantProphet_p" alt="Croissant Prophet, passive side"></figure>
+        <dl>
+          <dt>A</dt><dd>The NUMBER: how many cards you draw when you play the card.</dd>
+          <dt>B</dt><dd>The KEYWORD, on some cards: when the card may or must be played.</dd>
+          <dt>C</dt><dd>The NAME. Actions and rules can refer to a card by its name.</dd>
+          <dt>D</dt><dd>The CLASS, on some cards. Actions and rules can refer to every card of a class, such as COURT or PROPHET.</dd>
+          <dt>E</dt><dd>The ACTION: what happens when you play the card.</dd>
+          <dt>F</dt><dd>The side. Every card has a PASSIVE side (blue) and an IGNITED side (orange).</dd>
+        </dl>
+      </div>
+      <div class="callout">
+        <h4>Cards never flip on their own</h4>
+        <p>A card changes sides only when a rule or an action says so. Drawing, shuffling, discarding, playing or moving a card never turns it over.</p>
+      </div>
+    </section>
+
+    <section id="r-turn">
+      <h3>A turn</h3>
+      <p>You play turn after turn, until you meet every win condition or until you lose.</p>
+      <div class="callout">
+        <h4>Phases of a turn</h4>
+        <ol class="phases-list"><li>Play a card</li><li>Draw &amp; equip</li><li>Action</li><li>Ignite</li><li>Clean-up</li></ol>
+      </div>
+
+      <h4>1. Play a card</h4>
+      <p>Choose one of your EQUIPPED CARDS and move it to the PLAY AREA. It no longer counts as equipped.</p>
+      <p><span class="kw u">URGENT</span> While you have an URGENT card equipped, the card you play must be URGENT. If several are, you pick which one.</p>
+      <p><span class="kw r">ROYAL</span> A ROYAL card may be played even while URGENT cards are equipped. In the base game, only the PRINCESS is ROYAL.</p>
+
+      <h4>2. Draw &amp; equip</h4>
+      <p>Draw as many cards from the top of the DECK as the played card’s number. EQUIP the last card you drew, and put the others on the bottom of the DECK in the order you drew them.</p>
+      <div class="fig">
+        <div class="fig-card"><img data-card="guardian1_p" alt="Guardian"><span>played</span></div>
+        <div class="fig-arrow">→</div>
+        <div class="fig-card dim"><img data-card="rascal1_p" alt="Rascal"><span>1 · to bottom</span></div>
+        <div class="fig-card dim"><img data-card="eggs_p" alt="Eggs"><span>2 · to bottom</span></div>
+        <div class="fig-card hit"><img data-card="mender1_p" alt="Mender"><span>3 · equip</span></div>
+      </div>
+      <p class="example">The Guardian, number 3, is played. Of the top three cards of the DECK, the first two go to the bottom of the DECK, in that order, and the third is equipped.</p>
+      <p>If the DECK holds fewer cards than you have to draw, you lose at once.</p>
+      <p>Actions can leave you with more or fewer than 3 equipped cards. That is normal.</p>
+
+      <h4>3. Action</h4>
+      <p>Do what the played card’s ACTION says. If you can only do part of it, do as much as you can.</p>
+
+      <h4>4. Ignite</h4>
+      <p>Now IGNITE the played card:</p>
+      <ul>
+        <li>if its PASSIVE side is up, turn it over to its IGNITED side;</li>
+        <li>if it is already IGNITED, put it on the DISCARD PILE.</li>
+      </ul>
+      <div class="fig">
+        <div class="fig-card"><img data-card="mender1_p" alt="Mender, passive"><span>passive</span></div>
+        <div class="fig-arrow">→</div>
+        <div class="fig-card"><img data-card="mender1_i" alt="Mender, ignited"><span>ignited</span></div>
+        <div class="fig-arrow">→</div>
+        <div class="fig-card"><div class="gone">✕</div><span>discard</span></div>
+      </div>
+      <p>Except when an action says otherwise, this is the only moment a card changes sides.</p>
+      <p>Actions can IGNITE other cards too, with the same result: a PASSIVE card turns IGNITED, and an IGNITED card is discarded.</p>
+      <p>Igniting a card does not trigger its ignited action. To use that action, you have to equip the card and play it again.</p>
+
+      <h4>5. Clean-up</h4>
+      <p>If the played card is still in the PLAY AREA (it wasn’t discarded), put it on the bottom of the DECK.</p>
+    </section>
+
+    <section id="r-win">
+      <h3>Winning and losing</h3>
+      <div class="callout">
+        <p>You win when all three of these are true:</p>
+        <ul>
+          <li>A PROPHECY has named the DESIRED DISH: an ignited PROPHET was played.</li>
+          <li>The DESIRED DISH is IGNITED.</li>
+          <li>The ignited PRINCESS EQUIPS the ignited DESIRED DISH.</li>
+        </ul>
+      </div>
+      <h4>1. The prophecy</h4>
+      <p>There are three PROPHET cards, one for each BREAKFAST card: CROISSANT, EGGS and PANCAKES.</p>
+      <p>The first ignited PROPHET you play triggers the PROPHECY, and its BREAKFAST becomes the DESIRED DISH.</p>
+      <p>Set that PROPHET aside as a reminder. It stays out of play for the rest of the game: it is neither discarded nor returned to the DECK.</p>
+      <p>Only the first prophecy counts. An ignited PROPHET played later does nothing in its Action phase, and is discarded in its Ignite phase like any other ignited card.</p>
+      <h4>2. The desired dish</h4>
+      <p>Turn the DESIRED DISH to its IGNITED side, and keep it in the DECK so that the PRINCESS can equip it.</p>
+      <h4>3. Serving the princess</h4>
+      <p>Play the ignited PRINCESS and EQUIP the ignited DESIRED DISH in the same turn. The game ends right there: all three conditions are met and you win.</p>
+      <h4>Losing</h4>
+      <p>You lose if:</p>
+      <ul>
+        <li>the game ends without every win condition met (this can happen with expansions);</li>
+        <li>you would have to draw more cards than the DECK holds;</li>
+        <li>you can’t play any card in the Play phase.</li>
+      </ul>
+      <p>Discarding the PRINCESS doesn’t lose the game by itself, but getting her back is hard.</p>
+    </section>
+
+    <section id="r-exp">
+      <h3>Expansions</h3>
+      <p>Each of the six expansions adds cards and a win condition. You can add any of them to the base game, in any mix: shuffle their cards into the DECK. Their win conditions add to the base game’s and to each other’s. An expansion’s symbol is in the lower-left corner of its cards.</p>
+      <p>Besides the expansions, there are the Hands helper pack, the Blitz variant and the campaign.</p>
+      <div class="callout">
+        <h4>The discard pile</h4>
+        <p>This applies to every expansion. Cards are always discarded onto the top of the DISCARD PILE, and its order never changes unless an action says so. If an action tells you to DISCARD a card that is already in the DISCARD PILE, ignore that part for that card.</p>
+      </div>
+
+      <div class="exp"><img data-icon="hands" alt=""><div><h4>Hands</h4><small>Helper pack · 2 cards</small></div></div>
+      <p>Expansions can be hard, especially the first time or when you combine them. Shuffle in the two HANDS whenever you want an easier game. A good habit: add them after a loss and take them out after a win.</p>
+
+      <div class="exp"><img data-icon="mosquitos" alt=""><div><h4>Mosquitos</h4><small>1st expansion · 2 cards</small></div></div>
+      <p class="flavor">Two mosquitoes, Skoot and Squeek, are feeding on the sleeping princess. Swat them before she notices.</p>
+      <p>A small extra challenge for the base game.</p>
+      <p class="awc"><b>Extra win condition:</b> both MOSQUITO cards are in the DISCARD PILE.</p>
+
+      <div class="exp"><img data-icon="dreamGuide" alt=""><div><h4>Dream Guide</h4><small>2nd expansion · 5 cards</small></div></div>
+      <p class="flavor">The princess sleeps so deeply that she can’t wake up. The Dream Guide can take you into her dreams to bring her back.</p>
+      <p>A longer game.</p>
+      <p class="awc"><b>Extra win condition:</b> play the DREAM GUIDE at least once.</p>
+
+      <div class="exp"><img data-icon="gifts" alt=""><div><h4>Gifts</h4><small>3rd expansion · 4 cards</small></div></div>
+      <p class="flavor">Relatives and rival monarchs keep sending presents. Most of them are traps, but leaving one unopened would be an insult.</p>
+      <p>A wilder, less predictable game.</p>
+      <p class="awc"><b>Extra win condition:</b> play at least 3 GIFT cards.</p>
+      <p>The GIFT cards refer to COURT cards. These are the PRINCESS, the KING and both JOKERS from the base game, plus the QUEEN and the PRINCE from Dream Guide.</p>
+
+      <div class="exp"><img data-icon="juice" alt=""><div><h4>The Juice</h4><small>4th expansion · 3 cards</small></div></div>
+      <p class="flavor">Lately the princess feels weak and blames solid food. Whatever breakfast she really wants, when she wakes up she will accept nothing but the juice.</p>
+      <p>Bends the base game’s win conditions and makes them harsher.</p>
+      <p class="awc"><b>Extra win condition:</b> THE JUICE is the DESIRED DISH.</p>
+
+      <div class="exp"><img data-icon="wakingUp" alt=""><div><h4>Waking Up</h4><small>5th expansion · 6 cards</small></div></div>
+      <p class="flavor">Someone has been drugging the princess’s breakfast to keep her in bed and away from the throne, and her own father, the king, is in on the plot.</p>
+      <p>Take the base game’s PRINCESS and KING out of the game: the PRINCESS and KING of this expansion replace them.</p>
+      <p>Its three win conditions replace those of the base game.</p>
+      <div class="awc">
+        <b>Win conditions:</b>
+        <ul>
+          <li>A PROPHECY has named the DESIRED DISH: an ignited PROPHET was played.</li>
+          <li>The DESIRED DISH is in the DISCARD PILE.</li>
+          <li>The ignited PRINCESS EQUIPS the ignited THRONE.</li>
+        </ul>
+      </div>
+
+      <div class="exp"><img data-icon="all" alt=""><div><h4>All</h4><small>6th expansion · 1 card</small></div></div>
+      <p class="flavor">Everything is a bomb, the world included. Every story ends with a bang, so that it can all begin again.</p>
+      <p>A single card that stands for everything there is, and for its explosion. A hard expansion with a countdown.</p>
+      <p><span class="kw a">ABSOLUTE</span> This card must be played before any other card, even URGENT or ROYAL ones.</p>
+      <p class="awc"><b>Extra win condition:</b> ALL is EQUIPPED when the game ends.</p>
+    </section>
+
+    <section id="r-blitz">
+      <h3>Blitz</h3>
+      <p>A shorter but harder variant, for when you know the base cards well and only have a few minutes. Use only the base game cards, and remove one card of each pair (JOKER, MENDER, RASCAL, LIBRARIAN and GUARDIAN). That leaves 13 cards.</p>
+    </section>
+
+    <section id="r-campaign">
+      <h3>Campaign</h3>
+      <p>Six games in a row, each with one expansion, from the 1st (MOSQUITOS) to the 6th (ALL). The HANDS are in the deck from the first game on.</p>
+      <p>Right after each game, go through that game’s cards. Remove every card with the ○ symbol in the lower-right corner, and every ★ card that is in the DISCARD PILE (★ cards anywhere else stay). Removed cards are out for the rest of the campaign. Add the cards that remain to the next expansion’s cards: that is the DECK for the next game. Besides the base game’s win conditions, only the current expansion’s condition applies.</p>
+      <p>When Waking Up removes the base game’s PRINCESS and KING, they stay out for the rest of the campaign, and the Waking Up win conditions also apply to the last game.</p>
+      <h4>Score</h4>
+      <p>After the sixth game, score 1 point for every ★ card you kept until the last game (every ★ card in that game’s deck counts), 1 point for each win, and 3 points for winning the last game, with ALL.</p>
+      <p>5 points or more: bronze. 10 or more: silver. 15 or more: gold.</p>
+    </section>
+
+    <section id="r-faq">
+      <h3>Questions</h3>
+      <dl class="faq">
+        <dt>How should I approach my first game?</dt>
+        <dd>One card at a time. First learn how a turn goes, then what your equipped cards do, and only then aim for the win.</dd>
+        <dt>In what order does RASCAL ignite cards?</dt>
+        <dd>From the top of the DECK down, one card at a time, discarding cards in that same order when needed.</dd>
+        <dt>When a card tells you to find a card without saying where (ignited EGGS, passive KING…), can you also look in the DISCARD PILE?</dt>
+        <dd>Yes, you can search everywhere.</dd>
+      </dl>
+    </section>
+
+    <p class="credits">All Is Bomb was designed by Blaž Urban Gracar, with additional development by Igor Zuber (Letibus Design, 2022). The card art and this rules text were made for this unofficial web version.</p>
+  </template>
+
+  <template id="page-tpl">
+    <section id="r-page">
+      <h3>Playing on this page</h3>
+      <ul>
+        <li>Click a highlighted equipped card to play it. While a card asks for a choice, the cards you can pick are highlighted.</li>
+        <li>Hover a card to see both of its sides. Hover a playable card to see which deck card its draw would equip.</li>
+        <li>Right-click (or long-press) any card to zoom. On small screens, tap a card to open it.</li>
+        <li>Undo (or <b>Z</b>) steps back one turn, even in the middle of a choice. Restart replays the same shuffle.</li>
+        <li>If the 3 starting cards include nothing playable, the deck is reshuffled.</li>
+      </ul>
+    </section>
+    <p class="support">If you enjoy the game, please support its designer: get <a href="https://letibus.itch.io/aib" target="_blank" rel="noopener">All Is Bomb on itch.io</a> (pay what you want) or order the <a href="https://www.thegamecrafter.com/games/all-is-bomb" target="_blank" rel="noopener">printed deck</a>.</p>
+  </template>
+
+  <div id="log-box" hidden>
+    <div class="log-head">Log <button class="tool" id="btn-log-close" title="Close"></button></div>
+    <div id="log"></div>
+  </div>
+  <div id="overlay" hidden></div>
+
+  <script src="js/cards.js?v=10"></script>
+  <script src="js/engine.js?v=10"></script>
+  <script src="js/sound.js?v=10"></script>
+  <script src="js/ui.js?v=10"></script>
+</body>
+</html>
