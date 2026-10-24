@@ -1,8 +1,8 @@
 /* Card studio: lays out any card of the game, from the data in web/js/cards.js, in one of the art
  * styles in art/styles/. Pages:
  *   studio.html                         style samples, side by side
- *   studio.html?view=deck&style=ink     every card in one style
- *   studio.html?view=card&style=ink&id=princess&side=p
+ *   studio.html?view=deck&style=paper     every card in one style
+ *   studio.html?view=card&style=paper&id=princess&side=p
  * tools/render_cards.py drives the same functions to save the cards as image files.
  */
 (function (Art) {

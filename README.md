@@ -57,19 +57,18 @@ and installing as an app need a web server, for example `python3 -m http.server 
 | `web/index.html` | The page and the rules text |
 | `web/img/` | Card images, expansion symbols and app icons |
 | `web/sw.js`, `web/manifest.json` | Offline play and installation |
-| `art/` | The card studio: card layouts, illustrations and art styles |
-| `tools/render_cards.py` | Renders every card of a studio style into `web/img/` |
+| `art/` | The card studio: card layout, illustrations and the papercut style |
+| `tools/render_cards.py` | Renders every card from the studio into `web/img/` |
 
 ### Card art
 
 The card studio in `art/` draws each card from the data in `cards.js`: its layout (number, keyword,
-name, class, action text, side) and an illustration. The illustrations in `art/scenes.js` are shared
-by every style. Their shapes are tagged with roles (skin, hair, main colour, shadow…) rather than
-colours, and each style in `art/styles/` decides how to paint them and draws its own card frame.
+name, class, action text, side) and an illustration. The illustrations in `art/scenes.js` tag their
+shapes with roles (skin, hair, main colour, shadow…) rather than colours, and the papercut style in
+`art/styles/paper.js` decides how to paint them and draws the card frame.
 
-The game uses the papercut style (`art/styles/paper.js`). Open `art/studio.html` in a browser to see
-all the styles side by side, or `art/studio.html?view=deck&style=paper` for every card in one style.
-After changing an illustration or a style, render the cards again:
+Open `art/studio.html?view=deck&style=paper` in a browser to see every card. After changing an
+illustration or the style, render the cards again:
 
 ```sh
 pip install pillow playwright && playwright install chromium
