@@ -1,4 +1,4 @@
-# All Is Bomb: solo web version
+# All Is Bomb: web version
 
 A browser version of the solo game of **[All Is Bomb](https://letibus.itch.io/aib)**, the card game by
 **Blaž Urban Gracar** (Letibus Design), with all six expansions, the Hands helper pack, the Blitz
@@ -36,14 +36,17 @@ Keys: `Z` undo · `Esc` close. Right-click or long-press a card to zoom.
 
 ## How it's made
 
-```
-web/js/cards.js (card data) ──┬──▶ web/ (the game: plain HTML, CSS and JavaScript, no build step)
-art/ (card studio) ───────────┴─tools/render_cards.py──▶ web/img/ (card images)
+```mermaid
+flowchart LR
+  cards["web/js/cards.js<br>card data"] --> game["web/<br>the game"]
+  cards --> studio["art/<br>card studio"]
+  studio -- "tools/render_cards.py" --> img["web/img/<br>card images"]
+  img --> game
 ```
 
-`web/` is the whole site, and GitHub Pages serves it as it is. It also runs straight from the folder,
-by opening `web/index.html`, but offline play and installing as an app need a web server, for example
-`python3 -m http.server -d web`.
+`web/` is the whole site, plain HTML, CSS and JavaScript with no build step, and GitHub Pages serves
+it as it is. It also runs straight from the folder, by opening `web/index.html`, but offline play
+and installing as an app need a web server, for example `python3 -m http.server -d web`.
 
 | File | What it holds |
 | --- | --- |
